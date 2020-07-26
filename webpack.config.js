@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const path = require("path");
 
 module.exports = {
@@ -12,6 +14,14 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ["babel-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
       },
     ],
   },
