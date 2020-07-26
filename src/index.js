@@ -1,37 +1,49 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import {
   ApolloClient,
   ApolloProvider,
+  HttpLink,
   InMemoryCache,
-  gql,
 } from "@apollo/client";
 
-import App from "./App";
+import { setContext } from "@apollo/client/link/context";
 
+import App from "./App";
+import { AUTH_TOKEN } from "./constants";
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:4000",
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+const token = localStorage.getItem(AUTH_TOKEN);
 const client = new ApolloClient({
-  uri: "https://48p1r2roz4.sse.codesandbox.io",
+  uri: "http://localhost:4000",
+  headers: {
+    authorization: token ? `Bearer ${token}` : "",
+  },
   cache: new InMemoryCache(),
   mode: "no-cors",
 });
 
-client
-  .query({
-    query: gql`
-      query GetRates {
-        rates(currency: "USD") {
-          currency
-        }
-      }
-    `,
-  })
-  .then((result) => console.log(result));
-
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <BrowserRouter>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );
