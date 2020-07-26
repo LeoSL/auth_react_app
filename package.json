@@ -1,0 +1,11 @@
+{
+  "name": "auth_react_app",
+  "version": "1.0.0",
+  "description": "React App from Scratch with Apollo GraphQL auth",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "LeoSL",
+  "license": "ISC"
+}
